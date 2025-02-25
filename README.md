@@ -16,9 +16,9 @@ This script automates the setup of a customized `.bashrc` with enhanced theming,
 Clone this repository and run the script with the desired option:
 
 ```bash
-./setup-bashrc.sh install  # Installs the custom .bashrc
-./setup-bashrc.sh reset    # Restores the original .bashrc
-./setup-bashrc.sh theme    # Change the terminal theme
+./bashed.sh install  # Installs the custom .bashrc
+./bashed.sh reset    # Restores the original .bashrc
+./bashed.sh theme    # Change the terminal theme
 ```
 
 ## 🎭 Available Themes
