@@ -1,51 +1,79 @@
-# 🚀 [**BASHED**]: The Ultimate Bash Theme & Configuration Setup
+# 🚀 BASHED: The Ultimate Bash Theme & Configuration Setup
 
-This script automates the setup of a customized `.bashrc` with enhanced theming, a stylish prompt, Git integration, and command execution timing. It also allows easy backup, installation, and restoration of `.bashrc`, making it a powerful tool for personalizing your terminal experience.
+![Terminal Preview](img/image.png)
 
-## 🎨 Features
+This script automates setup of a customized `.bashrc` with Nerd Font theming, dynamic prompt, and Git integration.
 
-✅ **Multiple Themes** – Choose from 13 pre-defined themes to match your style.
-✅ **Dynamic Prompt** – Displays username, hostname, working directory, and Git status.
-✅ **Git Integration** – Shows branch name and status in the prompt.
-✅ **Command Timer** – Displays execution time for slow commands (>500ms).
-✅ **Backup & Restore** – Automatically backs up `.bashrc` before making changes.
-✅ **Fastfetch Support** – Runs `fastfetch` (if installed) on startup.
+## ✨ Features
 
-## 🔧 Installation & Usage
+- **13 Nerd Font Themes** - Professionally designed terminal themes
+- **Dynamic Prompt** - Shows user, host, directory, and Git status
+- **Git Integration** - Real-time branch tracking with status indicators
+- **Performance Metrics** - Command execution timing (>500ms)
+- **Safe Installation** - Automatic backup before changes
 
-Clone this repository and run the script with the desired option:
+## 🛠 Installation
 
 ```bash
-./bashed.sh install  # Installs the custom .bashrc
-./bashed.sh reset    # Restores the original .bashrc
-./bashed.sh theme    # Change the terminal theme
+# Clone repository
+git clone https://github.com/yourusername/bashed-terminal.git
+cd bashed-terminal
 ```
 
-## 🎭 Available Themes
+### Install with theme selection
 
-1️⃣ **Cyan** 🌊  
-2️⃣ **Blue** 🔵  
-3️⃣ **Green** 🌿  
-4️⃣ **Red** 🔥  
-5️⃣ **Orange** 🍊  
-6️⃣ **Pink** 🎀  
-7️⃣ **Lime Green** 🍏  
-8️⃣ **Purple** 💜  
-9️⃣ **Rainbow** 🌈  
-🔟 **Cyberpunk** 🤖  
-1️⃣1️⃣ **Neon** 🌟  
-1️⃣2️⃣ **Fire** 🔥  
-1️⃣3️⃣ **Galaxy** 🌌  
+```bash
+./bashed.sh install # Initial Installation
+```
+
+### Other commands:
+
+```bash
+./bashed.sh reset    # Restore original config
+./bashed.sh theme    # Change theme
+```
+
+## 🎨 Available Themes
+
+| ID  | Theme Name | Preview Icons | Colors      |
+| --- | ---------- | ------------- | ----------- |
+| 1   | Arch Linux | `      `     | Cyan/Blue   |
+| 2   | Docker     | `      `     | Blue/Cyan   |
+| 3   | Ubuntu     | `      `     | Green/Blue  |
+| 4   | Fedora     | `  󱇯    `     | Red/Cyan    |
+| 5   | Debian     | `      `     | Orange/Blue |
+| 6   | Pink       | `  󱢅    `     | Pastel Pink |
+| 7   | MacOS      | `  󰧨  󰷶  `     | Green/Gray  |
+| 8   | Music      | `󰌳    󰙽  `     | Purple/Blue |
+| 9   | Rainbow    | `      `     | Multi-color |
+| 10  | Terminal   | `      `     | Cyan/Purple |
+| 11  | Lightning  | `  󱣝    `     | Green/Cyan  |
+| 12  | Fire       | `      `     | Red/Yellow  |
+| 13  | Space      | `  󱎃     `     | Purple/Blue |
+
+## 📷 Screenshots
+
+| Theme Example                      | Git Integration             | Command Timing                    |
+| ---------------------------------- | --------------------------- | --------------------------------- |
+| ![Theme 1](screenshots/theme1.png) | ![Git](screenshots/git.png) | ![Timing](screenshots/timing.png) |
 
 ## ⚙️ Requirements
 
-- **Bash** (Default shell for Linux)
-- **Git** (For Git prompt functionality, optional)
-- **Fastfetch** (Optional, for system info display)
+- **Bash** 4.0+
+- **Nerd Fonts** (recommended: FiraCode, Hack)
+- **Git** (for full functionality)
+
+---
+
+**Pro Tip**: For best experience, use with terminal emulators that support Nerd Fonts like:
+
+- Windows Terminal
+- iTerm2 (macOS)
+- Kitty
+- Alacritty
 
 ## 📜 License
 
-This project is open-source and available under the MIT License.
+MIT Licensed - Free for personal and commercial use
 
 ---
-Give your terminal a fresh look and make your command-line experience more fun! 🚀
