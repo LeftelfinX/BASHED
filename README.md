@@ -35,21 +35,7 @@ cd bashed-terminal
 
 ## 🎨 Available Themes
 
-| ID  | Theme Name | Preview Icons | Colors      |
-| --- | ---------- | ------------- | ----------- |
-| 1   | Arch Linux | `      `     | Cyan/Blue   |
-| 2   | Docker     | `      `     | Blue/Cyan   |
-| 3   | Ubuntu     | `      `     | Green/Blue  |
-| 4   | Fedora     | `  󱇯    `     | Red/Cyan    |
-| 5   | Debian     | `      `     | Orange/Blue |
-| 6   | Pink       | `  󱢅    `     | Pastel Pink |
-| 7   | MacOS      | `  󰧨  󰷶  `     | Green/Gray  |
-| 8   | Music      | `󰌳    󰙽  `     | Purple/Blue |
-| 9   | Rainbow    | `      `     | Multi-color |
-| 10  | Terminal   | `      `     | Cyan/Purple |
-| 11  | Lightning  | `  󱣝    `     | Green/Cyan  |
-| 12  | Fire       | `      `     | Red/Yellow  |
-| 13  | Space      | `  󱎃     `     | Purple/Blue |
+![list_image](/img/List.png)
 
 ## 📷 Screenshots
 
