@@ -86,7 +86,7 @@ cd BASHED
 
 You’ll see an interactive menu:
 
-```
+```bash
 ==== Bashrc Manager ====
 1) Install custom bashrc
 2) Change theme
@@ -180,5 +180,3 @@ Will be added soon!!
 ## 📜 License
 
 MIT — Free to use, tweak, and share.
-
----
