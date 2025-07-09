@@ -1,49 +1,44 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# bashrc-installer - Custom .bashrc Configuration Manager
-# 
-# A script to install, manage, and theme custom bash configurations with:
-# - Backup/Restore functionality
-# - Theme selection system
-# - Nerd Fonts integration
+# bashrc-installer - Interactive Bashrc Config Manager
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
 # GLOBAL VARIABLES
 # ------------------------------------------------------------------------------
-readonly CURRENT_DIR=$(pwd)
+readonly CURRENT_DIR="$(pwd)"
 readonly BACKUP_DIR="${CURRENT_DIR}/backup"
 readonly SYSTEM_BASHRC="${HOME}/.bashrc"
 readonly CUSTOM_BASHRC="${CURRENT_DIR}/.bashrc"
+readonly DEFAULT_BASHRC="${CURRENT_DIR}/default.bashrc"
 readonly BASH_THEME_FILE="${HOME}/.bash_theme"
+readonly MARKER="# CUSTOM_BASHRC"
 
 # ------------------------------------------------------------------------------
 # FUNCTIONS
 # ------------------------------------------------------------------------------
 
-# Display theme selection menu with Nerd Font icons and color descriptions
+# Display theme selection menu with Nerd Font icons
 function select_theme() {
     cat <<EOF
 Available Themes:
-
-[1]  Arch Linux       (      ) - Cyan/White/Blue
-[2]  Docker           (      ) - Blue/White/Cyan  
-[3]  Ubuntu           (      ) - Green/White/Blue
-[4]  Fedora           (  󱇯    ) - Red/White/Cyan
-[5]  Debian           (      ) - Orange/White/Blue
-[6]  Pink             (  󱢅    ) - Pastel Pink
-[7]  MacOS            (  󰧨  󰷶  ) - Green/Gray/Cyan
-[8]  Music            (󰌳    󰙽  ) - Purple/White/Blue
-[9]  Rainbow          (      ) - Red/Green/Cyan
-[10] Terminal         (      ) - Cyan/Purple/Blue
-[11] Lightning        (  󱣝    ) - Green/Cyan/Blue
-[12] Fire             (      ) - Red/Yellow/Cyan
-[13] Space            (  󱎃    ) - Purple/Blue/Cyan
+[1]  Arch Linux       (      )
+[2]  Docker           (      )
+[3]  Ubuntu           (      )
+[4]  Fedora           (  󱇯    )
+[5]  Debian           (      )
+[6]  Pink             (  󱢅    )
+[7]  MacOS            (  󰧨  󰷶  )
+[8]  Music            (󰌳    󰙽  )
+[9]  Rainbow          (      )
+[10] Terminal         (      )
+[11] Lightning        (  󱣝    )
+[12] Fire             (      )
+[13] Space            (  󱎃    )
 EOF
 
     read -rp "Select theme [1-13] (Default: 1): " theme_number
 
-    # Validate input and set default if invalid
     if [[ "${theme_number}" =~ ^[1-9]$|^1[0-3]$ ]]; then
         echo "${theme_number}" > "${BASH_THEME_FILE}"
         echo "✓ Theme ${theme_number} saved"
@@ -53,98 +48,110 @@ EOF
     fi
 }
 
-# Install the custom bashrc with backup capability
+# Install the custom bashrc with backup and marker
 function install_bashrc() {
-    # Create backup directory with error handling
-    if ! mkdir -p "${BACKUP_DIR}"; then
-        echo "✗ Failed to create backup directory" >&2
+    mkdir -p "${BACKUP_DIR}"
+
+    # Backup existing
+    if [[ -f "${SYSTEM_BASHRC}" ]]; then
+        cp "${SYSTEM_BASHRC}" "${BACKUP_DIR}/.bashrc.backup"
+        echo "✓ Existing .bashrc backed up"
+    fi
+
+    if [[ ! -f "${CUSTOM_BASHRC}" ]]; then
+        echo "✗ Custom .bashrc not found at ${CUSTOM_BASHRC}" >&2
         return 1
     fi
 
-    # Backup existing .bashrc if present
+    # Insert marker if missing
+    if ! grep -q "${MARKER}" "${CUSTOM_BASHRC}"; then
+        echo -e "\n${MARKER}" >> "${CUSTOM_BASHRC}"
+    fi
+
+    select_theme
+
+    cp "${CUSTOM_BASHRC}" "${SYSTEM_BASHRC}"
+    echo "✓ New custom .bashrc installed"
+    source "${SYSTEM_BASHRC}"
+}
+
+# Change theme only if custom config is installed
+function change_theme() {
+    if ! is_custom_installed; then
+        echo "✗ Custom .bashrc is not installed. Install it first."
+        return 1
+    fi
+    select_theme
+}
+
+# Restore default bashrc template
+function restore_default() {
+    mkdir -p "${BACKUP_DIR}"
+
+    if [[ ! -f "${DEFAULT_BASHRC}" ]]; then
+        echo "✗ Default .bashrc not found at ${DEFAULT_BASHRC}" >&2
+        return 1
+    fi
+
     if [[ -f "${SYSTEM_BASHRC}" ]]; then
-        if ! cp "${SYSTEM_BASHRC}" "${BACKUP_DIR}/.bashrc.backup"; then
-            echo "✗ Backup failed" >&2
-            return 1
-        fi
-        echo "✓ Original .bashrc backed up"
+        cp "${SYSTEM_BASHRC}" "${BACKUP_DIR}/.bashrc.before-default"
+        echo "✓ Current .bashrc backed up"
+    fi
+
+    cp "${DEFAULT_BASHRC}" "${SYSTEM_BASHRC}"
+    echo "✓ Default .bashrc restored"
+
+    echo "1" > "${BASH_THEME_FILE}"
+    echo "✓ Theme reset to default (1)"
+
+    source "${SYSTEM_BASHRC}"
+}
+
+# Backup current .bashrc manually
+function backup_current() {
+    mkdir -p "${BACKUP_DIR}"
+    if [[ -f "${SYSTEM_BASHRC}" ]]; then
+        cp "${SYSTEM_BASHRC}" "${BACKUP_DIR}/.bashrc.manual-backup"
+        echo "✓ Current .bashrc backed up"
     else
         echo "ℹ No existing .bashrc found"
     fi
-
-    # Install new configuration
-    if [[ ! -f "${CUSTOM_BASHRC}" ]]; then
-        echo "✗ Custom .bashrc not found" >&2
-        return 1
-    fi
-
-    select_theme  # Prompt for theme selection
-
-    if ! cp "${CUSTOM_BASHRC}" "${SYSTEM_BASHRC}"; then
-        echo "✗ Installation failed" >&2
-        return 1
-    fi
-
-    echo "✓ New .bashrc installed"
-    source "${SYSTEM_BASHRC}"  # Apply changes
 }
 
-# Restore original bashrc from backup
-function reset_bashrc() {
-    if [[ ! -f "${BACKUP_DIR}/.bashrc.backup" ]]; then
-        echo "✗ No backup found" >&2
-        return 1
-    fi
-
-    if ! cp "${BACKUP_DIR}/.bashrc.backup" "${SYSTEM_BASHRC}"; then
-        echo "✗ Restoration failed" >&2
-        return 1
-    fi
-
-    echo "✓ Original .bashrc restored"
-    source "${SYSTEM_BASHRC}"  # Apply changes
-}
-
-# Display usage information
-function show_help() {
-    cat <<EOF
-Usage: ${0##*/} COMMAND
-
-Commands:
-  install   Install custom .bashrc with theme selection
-  reset     Restore original .bashrc from backup  
-  theme     Change theme without reinstalling
-  help      Show this help message
-
-Features:
-  - 13 preconfigured themes with Nerd Fonts
-  - Automatic backup/restore
-  - Color-coded output
-EOF
+# Check if custom bashrc is installed
+function is_custom_installed() {
+    [[ -f "${SYSTEM_BASHRC}" ]] && grep -q "${MARKER}" "${SYSTEM_BASHRC}"
 }
 
 # ------------------------------------------------------------------------------
-# MAIN EXECUTION
+# MAIN LOOP
 # ------------------------------------------------------------------------------
+while true; do
+    echo -e "\n\e[1;34m==== Bashrc Manager ====\e[0m"
+    echo "1) Install custom bashrc"
+    if is_custom_installed; then
+        echo "2) Change theme"
+    else
+        echo -e "2) \e[2mChange theme (unavailable)\e[0m"
+    fi
+    echo "3) Restore default bashrc"
+    echo "4) Backup current bashrc"
+    echo "5) Exit"
 
-case "$1" in
-    install)
-        install_bashrc
-        ;;
-    reset)
-        reset_bashrc
-        ;;
-    theme)
-        select_theme
-        ;;
-    help|--help|-h|"")
-        show_help
-        ;;
-    *)
-        echo "Invalid command: $1" >&2
-        show_help
-        exit 1
-        ;;
-esac
+    read -rp "Select option [1-5]: " choice
 
-exit 0
+    case "$choice" in
+        1) install_bashrc ;;
+        2) 
+            if is_custom_installed; then
+                change_theme
+            else
+                echo "✗ Option unavailable. Install custom bashrc first."
+            fi
+            ;;
+        3) restore_default ;;
+        4) backup_current ;;
+        5) echo "Goodbye!"; exit 0 ;;
+        *) echo "Invalid option." ;;
+    esac
+done
