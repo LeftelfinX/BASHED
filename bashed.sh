@@ -72,7 +72,11 @@ function install_bashrc() {
 
     cp "${CUSTOM_BASHRC}" "${SYSTEM_BASHRC}"
     echo "✓ New custom .bashrc installed"
+
+    # Apply immediately in current shell
+    # shellcheck disable=SC1090
     source "${SYSTEM_BASHRC}"
+    echo "✓ Theme applied to current session"
 }
 
 # Change theme only if custom config is installed
@@ -82,6 +86,10 @@ function change_theme() {
         return 1
     fi
     select_theme
+    # Apply new theme immediately
+    # shellcheck disable=SC1090
+    source "${SYSTEM_BASHRC}"
+    echo "✓ Theme reapplied with new selection"
 }
 
 # Restore default bashrc template
@@ -104,7 +112,10 @@ function restore_default() {
     echo "1" > "${BASH_THEME_FILE}"
     echo "✓ Theme reset to default (1)"
 
+    # Apply immediately
+    # shellcheck disable=SC1090
     source "${SYSTEM_BASHRC}"
+    echo "✓ Default theme applied to current session"
 }
 
 # Backup current .bashrc manually
